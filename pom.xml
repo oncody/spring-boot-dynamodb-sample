@@ -13,7 +13,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
-    <junit.version>5.7.2</junit.version>
     <aws.version>1.12.37</aws.version>
     <sqlite.version>1.0.392</sqlite.version>
     <surefire.version>2.22.2</surefire.version>
@@ -42,20 +41,6 @@
       <groupId>com.github.derjust</groupId>
       <artifactId>spring-data-dynamodb</artifactId>
       <version>5.1.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
