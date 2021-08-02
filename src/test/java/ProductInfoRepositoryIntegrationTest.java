@@ -1,12 +1,17 @@
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.example.DynamoDBConfig;
+import com.example.ProductInfo;
+import com.example.repositories.ProductInfoRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,42 +25,43 @@ import static org.hamcrest.MatcherAssert.assertThat;
 // @WebAppConfiguration
 // @ActiveProfiles("local")
 // @TestPropertySource(properties = { 
-  // "amazon.dynamodb.endpoint=http://localhost:8000/", 
-  // "amazon.aws.accesskey=test1", 
-  // "amazon.aws.secretkey=test231" })
-    @SpringBootTest
+// "amazon.dynamodb.endpoint=http://localhost:8000/", 
+// "amazon.aws.accesskey=test1", 
+// "amazon.aws.secretkey=test231" })
+@SpringBootTest(classes = DynamoDBConfig.class)
 public class ProductInfoRepositoryIntegrationTest {
 
-  AmazonDynamoDB amazonDynamoDB; 
+  AmazonDynamoDB amazonDynamoDB;
   ProductInfoRepository repository;
   private DynamoDBMapper dynamoDBMapper;
 
-  ProductInfoRepositoryIntegrationTest(@Autowired AmazonDynamoDB amazonDynamoDB, @Autowired ProductInfoRepository repository) {
+  ProductInfoRepositoryIntegrationTest(@Autowired AmazonDynamoDB amazonDynamoDB,
+      @Autowired ProductInfoRepository repository) {
     this.amazonDynamoDB = amazonDynamoDB;
     this.repository = repository;
   }
 
-    @BeforeEach
-    public void setup() throws Exception {
-    }
+  @BeforeEach
+  public void setup() throws Exception {
+  }
 
-    @Test
-    public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() { 
-      String EXPECTED_COST = "20";
-      String EXPECTED_PRICE = "50";
-      dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-      
-      CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(ProductInfo.class);
-      tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-      amazonDynamoDB.createTable(tableRequest);
-      
-      dynamoDBMapper.batchDelete(
-        (List<ProductInfo>)repository.findAll());
-        ProductInfo productInfo = new ProductInfo(EXPECTED_COST, EXPECTED_PRICE);
-        repository.save(productInfo); 
-        List<ProductInfo> result = (List<ProductInfo>) repository.findAll();
+  @Test
+  @Timeout(value = 10, unit = TimeUnit.SECONDS)
+  public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() {
+    String EXPECTED_COST = "20";
+    String EXPECTED_PRICE = "50";
+    dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
-        assertThat(result.size(), is(greaterThan(0)));
-        assertThat(result.get(0).getCost(), is(equalTo(EXPECTED_COST))); 
-    }
+    CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(ProductInfo.class);
+    tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+    amazonDynamoDB.createTable(tableRequest);
+
+    dynamoDBMapper.batchDelete((List<ProductInfo>) repository.findAll());
+    ProductInfo productInfo = new ProductInfo(EXPECTED_COST, EXPECTED_PRICE);
+    repository.save(productInfo);
+    List<ProductInfo> result = (List<ProductInfo>) repository.findAll();
+
+    assertThat(result.size(), is(greaterThan(0)));
+    assertThat(result.get(0).getCost(), is(equalTo(EXPECTED_COST)));
+  }
 }
