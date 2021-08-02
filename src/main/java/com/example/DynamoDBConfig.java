@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 
@@ -19,9 +22,10 @@ import org.springframework.context.annotation.Configuration;
 @EnableDynamoDBRepositories(basePackages = "com.example.repositories")
 public class DynamoDBConfig {
 
-  private String amazonDynamoDBEndpoint = "http://localhost:8000/";
-  private String amazonAWSAccessKey = "key";
-  private String amazonAWSSecretKey = "key2";
+  private final int PORT = 8080;
+  private final String DOMAIN = "http://localhost:" + PORT;
+  private final String ACCESS_KEY = "access";
+  private final String SECRET_KEY = "secret";
 
   @Bean
   public AmazonDynamoDB amazonDynamoDB() {
@@ -30,12 +34,11 @@ public class DynamoDBConfig {
       System.setProperty("sqlite4java.library.path", "native-libs");
 
       System.out.println("Finding port");
-      final String port = getAvailablePort();
-      System.out.println("Port found: " + port);
+      // final String port = getAvailablePort();
+      // System.out.println("Port found: " + PORT);
 
       System.out.println("Creating server");
-      DynamoDBProxyServer server = ServerRunner
-          .createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", port });
+      DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
       System.out.println("Server created");
 
       System.out.println("Starting server");
@@ -43,18 +46,23 @@ public class DynamoDBConfig {
       System.out.println("Server started");
 
       System.out.println("Instantiating client");
-      AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials("access", "secret"));
+      AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
       System.out.println("Client instantiated");
 
       System.out.println("Setting endpoint");
-      amazonDynamoDB.setEndpoint("http://localhost:" + port);
+      amazonDynamoDB.setEndpoint(DOMAIN);
       System.out.println("Endpoint set");
+
+      // AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+      // .withCredentials(new AWSStaticCredentialsProvider(new
+      // BasicAWSCredentials("access", "secret")))
+      // .withEndpointConfiguration(new
+      // AwsClientBuilder.EndpointConfiguration("http://localhost:8080", "us-west-2"))
+      // .build();
 
       // AmazonDynamoDB amazonDynamoDB = new
       // AmazonDynamoDBClient(amazonAWSCredentials());
-      // if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
       // amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
-      // }
 
       return amazonDynamoDB;
     } catch (Exception e) {
@@ -62,10 +70,10 @@ public class DynamoDBConfig {
     }
   }
 
-  @Bean
-  public AWSCredentials amazonAWSCredentials() {
-    return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
-  }
+  // @Bean
+  // public AWSCredentials amazonAWSCredentials() {
+  // return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
+  // }
 
   private String getAvailablePort() {
     try (final ServerSocket serverSocket = new ServerSocket(0)) {

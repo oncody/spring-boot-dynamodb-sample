@@ -47,7 +47,7 @@ public class ProductInfoRepositoryIntegrationTest {
   }
 
   @Test
-  @Timeout(value = 20, unit = TimeUnit.SECONDS)
+  @Timeout(value = 10, unit = TimeUnit.SECONDS)
   public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() {
     String EXPECTED_COST = "20";
     String EXPECTED_PRICE = "50";
