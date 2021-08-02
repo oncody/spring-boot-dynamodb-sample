@@ -30,18 +30,9 @@ public class DynamoDBConfig {
   @Bean
   public AmazonDynamoDB amazonDynamoDB() {
     try {
-      System.out.println("Creating local dynamoDB");
       System.setProperty("sqlite4java.library.path", "native-libs");
-
-      System.out.println("Finding port");
-      // final String port = getAvailablePort();
-      // System.out.println("Port found: " + PORT);
-
       DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
       server.start();
-
-      // AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
-      // amazonDynamoDB.setEndpoint(DOMAIN);
 
       AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
       .withCredentials(new AWSStaticCredentialsProvider(new
@@ -50,26 +41,9 @@ public class DynamoDBConfig {
       AwsClientBuilder.EndpointConfiguration(DOMAIN, "us-west-2"))
       .build();
 
-      // AmazonDynamoDB amazonDynamoDB = new
-      // AmazonDynamoDBClient(amazonAWSCredentials());
-      // amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
-
       return amazonDynamoDB;
     } catch (Exception e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  // @Bean
-  // public AWSCredentials amazonAWSCredentials() {
-  // return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
-  // }
-
-  private String getAvailablePort() {
-    try (final ServerSocket serverSocket = new ServerSocket(0)) {
-      return String.valueOf(serverSocket.getLocalPort());
-    } catch (IOException e) {
-      throw new RuntimeException("Available port was not found", e);
     }
   }
 }
