@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(classes = { Config.class, DynamoService.class })
 public class DynamoTest {
-  DynamoService<Product> dynamo;
+  private final DynamoService<Product> dynamo;
 
   DynamoTest(@Autowired DynamoService<Product> dynamo) {
     this.dynamo = dynamo;
@@ -26,7 +26,6 @@ public class DynamoTest {
 
     dynamo.createTable(Product.class);
     dynamo.deleteAllRecords();
-
     List<Product> records = dynamo.getAllRecords();
     assertThat(records.size(), is(equalTo(0)));
 
