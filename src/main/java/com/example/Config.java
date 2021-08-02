@@ -22,20 +22,16 @@ public class Config {
   private final String SECRET_KEY = "secret";
 
   @Bean
-  public AmazonDynamoDB amazonDynamoDB() {
-    try {
-      System.setProperty("sqlite4java.library.path", "native-libs");
-      DynamoDBProxyServer server = ServerRunner
-          .createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
-      server.start();
+  public AmazonDynamoDB amazonDynamoDB() throws Exception {
+    System.setProperty("sqlite4java.library.path", "native-libs");
+    DynamoDBProxyServer server = ServerRunner
+        .createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
+    server.start();
 
-      AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
-          .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY)))
-          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, null)).build();
+    AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+        .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY)))
+        .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, null)).build();
 
-      return amazonDynamoDB;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    return amazonDynamoDB;
   }
 }
