@@ -30,7 +30,7 @@ public class DynamoTest {
     List<Product> records = dynamo.getAllRecords();
     assertThat(records.size(), is(equalTo(0)));
 
-    dynamo.insert(new Product(EXPECTED_COST, EXPECTED_PRICE));
+    dynamo.insertRecord(new Product(EXPECTED_COST, EXPECTED_PRICE));
     records = dynamo.getAllRecords();
     assertThat(records.size(), is(equalTo(1)));
 

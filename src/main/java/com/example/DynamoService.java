@@ -37,7 +37,7 @@ public class DynamoService<T> {
         return Lists.newArrayList(repo.findAll());
     }
 
-    public void insert(T payload) {
+    public void insertRecord(T payload) {
         repo.save(payload);
     }
 }
