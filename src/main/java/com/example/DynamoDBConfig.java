@@ -37,21 +37,10 @@ public class DynamoDBConfig {
       // final String port = getAvailablePort();
       // System.out.println("Port found: " + PORT);
 
-      System.out.println("Creating server");
       DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
-      System.out.println("Server created");
-
-      System.out.println("Starting server");
       server.start();
-      System.out.println("Server started");
-
-      System.out.println("Instantiating client");
       AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
-      System.out.println("Client instantiated");
-
-      System.out.println("Setting endpoint");
       amazonDynamoDB.setEndpoint(DOMAIN);
-      System.out.println("Endpoint set");
 
       // AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
       // .withCredentials(new AWSStaticCredentialsProvider(new
