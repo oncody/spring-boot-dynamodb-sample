@@ -14,8 +14,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String cost, String msrp) {
-        this.price = msrp;
+    public Product(String price, String cost) {
+        this.price = price;
         this.cost = cost;
     }
 

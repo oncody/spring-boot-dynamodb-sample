@@ -21,8 +21,8 @@ public class DynamoTest {
   @Test
   @Timeout(value = 10, unit = TimeUnit.SECONDS)
   public void testProductTable() {
-    String EXPECTED_COST = "20";
-    String EXPECTED_PRICE = "50";
+    String price = "50";
+    String cost = "20";
 
     dynamo.createTable(Product.class);
     dynamo.deleteAllRecords();
@@ -30,12 +30,12 @@ public class DynamoTest {
     List<Product> records = dynamo.getAllRecords();
     assertThat(records.size(), is(equalTo(0)));
 
-    dynamo.insertRecord(new Product(EXPECTED_COST, EXPECTED_PRICE));
+    dynamo.insertRecord(new Product(price, cost));
     records = dynamo.getAllRecords();
     assertThat(records.size(), is(equalTo(1)));
 
     Product record = records.get(0);
-    assertThat(record.getCost(), is(equalTo(EXPECTED_COST)));
-    assertThat(record.getPrice(), is(equalTo(EXPECTED_PRICE)));
+    assertThat(record.getPrice(), is(equalTo(price)));
+    assertThat(record.getCost(), is(equalTo(cost)));
   }
 }
