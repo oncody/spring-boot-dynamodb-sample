@@ -31,7 +31,7 @@ public class Config {
 
       AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
           .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY)))
-          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, "us-west-2")).build();
+          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, null)).build();
 
       return amazonDynamoDB;
     } catch (Exception e) {
