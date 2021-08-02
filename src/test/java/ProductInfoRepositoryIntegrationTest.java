@@ -5,11 +5,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.example.DynamoDBConfig;
+import com.example.Config;
 import com.example.ProductInfo;
 import com.example.repositories.ProductInfoRepository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SpringBootTest(classes = DynamoDBConfig.class)
+@SpringBootTest(classes = Config.class)
 public class ProductInfoRepositoryIntegrationTest {
 
   AmazonDynamoDB amazonDynamoDB;

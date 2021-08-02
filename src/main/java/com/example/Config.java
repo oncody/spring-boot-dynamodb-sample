@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.example.repositories")
-public class DynamoDBConfig {
+public class Config {
 
   private final int PORT = 8080;
   private final String DOMAIN = "http://localhost:" + PORT;
