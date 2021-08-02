@@ -34,4 +34,16 @@ public class ProductInfo {
     public String getCost() {
         return cost;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMsrp(String msrp) {
+        this.msrp = msrp;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
 }

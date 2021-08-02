@@ -47,7 +47,7 @@ public class ProductInfoRepositoryIntegrationTest {
   }
 
   @Test
-  @Timeout(value = 10, unit = TimeUnit.SECONDS)
+  @Timeout(value = 20, unit = TimeUnit.SECONDS)
   public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() {
     String EXPECTED_COST = "20";
     String EXPECTED_PRICE = "50";
@@ -63,15 +63,23 @@ public class ProductInfoRepositoryIntegrationTest {
     dynamoDBMapper.batchDelete((List<ProductInfo>) repository.findAll());
     System.out.println("Records Deleted");
 
+    System.out.println("Fetching records");
+    List<ProductInfo> resultBefore = (List<ProductInfo>) repository.findAll();
+    System.out.println("Records fetched: " + resultBefore.size());
+
+    System.out.println("Asserting 0 records exist");
+    assertThat(resultBefore.size(), is(equalTo(0)));
+
     System.out.println("Adding record");
     repository.save(productInfo);
     System.out.println("Record added");
 
     System.out.println("Fetching records");
-    List<ProductInfo> result = (List<ProductInfo>) repository.findAll();
-    System.out.println("Records fetched");
+    List<ProductInfo> resultAfter = (List<ProductInfo>) repository.findAll();
+    System.out.println("Records fetched: " + resultAfter.size());
 
-    assertThat(result.size(), is(greaterThan(0)));
-    assertThat(result.get(0).getCost(), is(equalTo(EXPECTED_COST)));
+    assertThat(resultAfter.size(), is(equalTo(1)));
+    assertThat(resultAfter.get(0).getCost(), is(equalTo(EXPECTED_COST)));
+    assertThat(resultAfter.get(0).getMsrp(), is(equalTo(EXPECTED_PRICE)));
   }
 }
