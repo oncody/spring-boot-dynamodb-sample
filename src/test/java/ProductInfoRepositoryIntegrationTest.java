@@ -20,14 +20,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-// @RunWith(SpringJUnit4ClassRunner.class)
-// @SpringBootTest(classes = Application.class)
-// @WebAppConfiguration
-// @ActiveProfiles("local")
-// @TestPropertySource(properties = { 
-// "amazon.dynamodb.endpoint=http://localhost:8000/", 
-// "amazon.aws.accesskey=test1", 
-// "amazon.aws.secretkey=test231" })
 @SpringBootTest(classes = DynamoDBConfig.class)
 public class ProductInfoRepositoryIntegrationTest {
 
