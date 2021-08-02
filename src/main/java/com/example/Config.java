@@ -5,12 +5,14 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.example.repo")
@@ -33,5 +35,11 @@ public class Config {
         .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, null)).build();
 
     return amazonDynamoDB;
+  }
+
+  @Bean
+  @Primary
+  public DynamoDBMapper dynamoDBMapper() throws Exception {
+    return new DynamoDBMapper(amazonDynamoDB());
   }
 }

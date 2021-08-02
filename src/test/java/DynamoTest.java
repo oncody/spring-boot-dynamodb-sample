@@ -20,15 +20,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(classes = Config.class)
 public class DynamoTest {
-
   AmazonDynamoDB amazonDynamoDB;
   ProductRepo repository;
-  private DynamoDBMapper dynamoDBMapper;
+  DynamoDBMapper dynamoDBMapper;
 
-  DynamoTest(@Autowired AmazonDynamoDB amazonDynamoDB, @Autowired ProductRepo repository) {
+  DynamoTest(@Autowired AmazonDynamoDB amazonDynamoDB, @Autowired ProductRepo repository,
+      @Autowired DynamoDBMapper dynamoDBMapper) {
     this.amazonDynamoDB = amazonDynamoDB;
     this.repository = repository;
-    this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+    this.dynamoDBMapper = dynamoDBMapper;
   }
 
   @Test
