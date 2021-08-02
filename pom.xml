@@ -123,12 +123,10 @@
       <type>so</type>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <dependencyManagement>
     <dependencies>
-
       <dependency>
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-releasetrain</artifactId>
@@ -136,13 +134,11 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
 
   <build>
     <plugins>
-
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire.version}</version>
@@ -172,7 +168,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
 
