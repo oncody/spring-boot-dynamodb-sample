@@ -31,15 +31,13 @@ public class DynamoDBConfig {
   public AmazonDynamoDB amazonDynamoDB() {
     try {
       System.setProperty("sqlite4java.library.path", "native-libs");
-      DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
+      DynamoDBProxyServer server = ServerRunner
+          .createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
       server.start();
 
       AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
-      .withCredentials(new AWSStaticCredentialsProvider(new
-      BasicAWSCredentials("access", "secret")))
-      .withEndpointConfiguration(new
-      AwsClientBuilder.EndpointConfiguration(DOMAIN, "us-west-2"))
-      .build();
+          .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY)))
+          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(DOMAIN, "us-west-2")).build();
 
       return amazonDynamoDB;
     } catch (Exception e) {
