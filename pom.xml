@@ -55,18 +55,6 @@
     </dependency>
   </dependencies>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-releasetrain</artifactId>
-        <version>Neumann-SR9</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <repositories>
     <repository>
       <id>dynamodb-local-oregon</id>
