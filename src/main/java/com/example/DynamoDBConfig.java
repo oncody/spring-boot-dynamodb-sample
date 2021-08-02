@@ -39,15 +39,16 @@ public class DynamoDBConfig {
 
       DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
       server.start();
-      AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
-      amazonDynamoDB.setEndpoint(DOMAIN);
 
-      // AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
-      // .withCredentials(new AWSStaticCredentialsProvider(new
-      // BasicAWSCredentials("access", "secret")))
-      // .withEndpointConfiguration(new
-      // AwsClientBuilder.EndpointConfiguration("http://localhost:8080", "us-west-2"))
-      // .build();
+      // AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
+      // amazonDynamoDB.setEndpoint(DOMAIN);
+
+      AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+      .withCredentials(new AWSStaticCredentialsProvider(new
+      BasicAWSCredentials("access", "secret")))
+      .withEndpointConfiguration(new
+      AwsClientBuilder.EndpointConfiguration(DOMAIN, "us-west-2"))
+      .build();
 
       // AmazonDynamoDB amazonDynamoDB = new
       // AmazonDynamoDBClient(amazonAWSCredentials());
