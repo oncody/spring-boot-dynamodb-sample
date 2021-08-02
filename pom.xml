@@ -12,8 +12,6 @@
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <aws.version>1.12.37</aws.version>
-    <sqlite.version>1.0.392</sqlite.version>
   </properties>
 
   <parent>
@@ -32,7 +30,7 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-core</artifactId>
-      <version>${aws.version}</version>
+      <version>1.12.37</version>
     </dependency>
 
     <dependency>
@@ -51,13 +49,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.almworks.sqlite4java</groupId>
-      <artifactId>sqlite4java</artifactId>
-      <version>${sqlite.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
