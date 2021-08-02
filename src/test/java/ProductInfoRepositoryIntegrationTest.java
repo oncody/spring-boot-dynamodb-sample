@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,10 +33,6 @@ public class ProductInfoRepositoryIntegrationTest {
     this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
   }
 
-  @BeforeEach
-  public void setup() throws Exception {
-  }
-
   @Test
   @Timeout(value = 10, unit = TimeUnit.SECONDS)
   public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() {
@@ -45,30 +40,16 @@ public class ProductInfoRepositoryIntegrationTest {
     String EXPECTED_PRICE = "50";
     ProductInfo productInfo = new ProductInfo(EXPECTED_COST, EXPECTED_PRICE);
 
-    System.out.println("Creating table");
     CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(ProductInfo.class);
     tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
     amazonDynamoDB.createTable(tableRequest);
-    System.out.println("Table created");
-
-    System.out.println("Deleting records");
     dynamoDBMapper.batchDelete((List<ProductInfo>) repository.findAll());
-    System.out.println("Records Deleted");
 
-    System.out.println("Fetching records");
     List<ProductInfo> resultBefore = (List<ProductInfo>) repository.findAll();
-    System.out.println("Records fetched: " + resultBefore.size());
-
-    System.out.println("Asserting 0 records exist");
     assertThat(resultBefore.size(), is(equalTo(0)));
 
-    System.out.println("Adding record");
     repository.save(productInfo);
-    System.out.println("Record added");
-
-    System.out.println("Fetching records");
     List<ProductInfo> resultAfter = (List<ProductInfo>) repository.findAll();
-    System.out.println("Records fetched: " + resultAfter.size());
 
     assertThat(resultAfter.size(), is(equalTo(1)));
     assertThat(resultAfter.get(0).getCost(), is(equalTo(EXPECTED_COST)));
