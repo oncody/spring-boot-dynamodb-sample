@@ -6,8 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.example.Config;
-import com.example.ProductInfo;
-import com.example.repositories.ProductInfoRepository;
+import com.example.Product;
+import com.example.repo.ProductRepo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -19,14 +19,13 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(classes = Config.class)
-public class ProductInfoRepositoryIntegrationTest {
+public class DynamoTest {
 
   AmazonDynamoDB amazonDynamoDB;
-  ProductInfoRepository repository;
+  ProductRepo repository;
   private DynamoDBMapper dynamoDBMapper;
 
-  ProductInfoRepositoryIntegrationTest(@Autowired AmazonDynamoDB amazonDynamoDB,
-      @Autowired ProductInfoRepository repository) {
+  DynamoTest(@Autowired AmazonDynamoDB amazonDynamoDB, @Autowired ProductRepo repository) {
     this.amazonDynamoDB = amazonDynamoDB;
     this.repository = repository;
     this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
@@ -34,24 +33,25 @@ public class ProductInfoRepositoryIntegrationTest {
 
   @Test
   @Timeout(value = 10, unit = TimeUnit.SECONDS)
-  public void givenItemWithExpectedCost_whenRunFindAll_thenItemIsFound() {
+  public void testProductTable() {
     String EXPECTED_COST = "20";
     String EXPECTED_PRICE = "50";
-    ProductInfo productInfo = new ProductInfo(EXPECTED_COST, EXPECTED_PRICE);
 
-    CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(ProductInfo.class);
+    CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(Product.class);
     tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
     amazonDynamoDB.createTable(tableRequest);
-    dynamoDBMapper.batchDelete((List<ProductInfo>) repository.findAll());
+    dynamoDBMapper.batchDelete((List<Product>) repository.findAll());
 
-    List<ProductInfo> resultBefore = (List<ProductInfo>) repository.findAll();
+    List<Product> resultBefore = (List<Product>) repository.findAll();
     assertThat(resultBefore.size(), is(equalTo(0)));
 
-    repository.save(productInfo);
-    List<ProductInfo> resultAfter = (List<ProductInfo>) repository.findAll();
+    repository.save(new Product(EXPECTED_COST, EXPECTED_PRICE));
+    List<Product> resultAfter = (List<Product>) repository.findAll();
 
     assertThat(resultAfter.size(), is(equalTo(1)));
-    assertThat(resultAfter.get(0).getCost(), is(equalTo(EXPECTED_COST)));
-    assertThat(resultAfter.get(0).getMsrp(), is(equalTo(EXPECTED_PRICE)));
+
+    Product productFound = resultAfter.get(0);
+    assertThat(productFound.getCost(), is(equalTo(EXPECTED_COST)));
+    assertThat(productFound.getPrice(), is(equalTo(EXPECTED_PRICE)));
   }
 }

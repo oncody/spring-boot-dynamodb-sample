@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableDynamoDBRepositories(basePackages = "com.example.repositories")
+@EnableDynamoDBRepositories(basePackages = "com.example.repo")
 public class Config {
 
   private final int PORT = 8080;
