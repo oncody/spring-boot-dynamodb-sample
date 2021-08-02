@@ -26,7 +26,8 @@ public class Config {
   @Bean
   public AmazonDynamoDB amazonDynamoDB() throws Exception {
     System.setProperty("sqlite4java.library.path", "native-libs");
-    DynamoDBProxyServer server = ServerRunner.createServerFromCommandLineArgs(new String[] { "-port", "" + PORT });
+    DynamoDBProxyServer server = ServerRunner
+        .createServerFromCommandLineArgs(new String[] { "-inMemory", "-port", "" + PORT });
     server.start();
 
     AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
